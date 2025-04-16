@@ -1,0 +1,79 @@
+//**
+ * TECH STACK:
+ * - Backend: Node.js + Express
+ * - Database: SQL (MySQL/PostgreSQL)
+ * - Auth: JWT
+ * - Email: SendGrid
+ * - File Upload: Multer + Cloud Storage/AWS S3
+ */
+
+/** API STRUCTURE OVERVIEW **/
+
+/** 1. USER AUTHENTICATION & PROFILES **/
+// POST /api/auth/register - Register a new user : done
+// POST /api/auth/login - Login user and return JWT token : done
+// GET /api/users/me - Get current user profile : done
+// PUT /api/users/me - Update user profile (personal info, career goals) : DONE
+
+/** 2. JOB APPLICATION LOGGING **/
+// POST /api/applications - Create a job application (with attachment)
+// GET /api/applications - Get all job applications for user
+// GET /api/applications/:id - Get single job application
+// PUT /api/applications/:id - Update job application
+// DELETE /api/applications/:id - Delete job application
+
+/** 3. REMINDER SYSTEM **/
+// POST /api/reminders - Set a reminder for an application
+// GET /api/reminders - Get all reminders for user
+// PUT /api/reminders/:id - Update reminder
+// DELETE /api/reminders/:id - Delete reminder
+
+/** 4. COMPANY INFORMATION MANAGEMENT **/
+// POST /api/companies - Add company info
+// GET /api/companies - Get all companies for user
+// GET /api/companies/:id - Get single company
+// PUT /api/companies/:id - Update company info
+// DELETE /api/companies/:id - Delete company
+
+/** 5. JOB LISTINGS STORAGE **/
+// POST /api/job-listings - Save a job listing
+// GET /api/job-listings - Get saved job listings
+// DELETE /api/job-listings/:id - Delete job listing
+
+/** 6. APPLICATION PROGRESS VISUALIZATION **/
+// GET /api/dashboard/overview - Dashboard summary data (stats)
+// GET /api/dashboard/charts - Data for charts/graphs (statuses, timelines)
+
+/** 7. SEARCH & FILTERING **/
+// GET /api/applications/search?keyword=&status=&dateRange= - Search & filter apps
+
+/** 8. NOTES **/
+// POST /api/applications/:id/notes - Add note to application
+// GET /api/applications/:id/notes - Get notes
+// DELETE /api/notes/:noteId - Delete note
+
+
+/** ADDITIONAL IMPLEMENTATION DETAILS **/
+// Middleware: JWT auth middleware to protect routes
+// Error Handling: Centralized error handler
+// Email Service: Schedule + trigger emails via SendGrid
+// File Upload: Multer middleware for file uploads
+
+/** SAMPLE FOLDER STRUCTURE **/
+- controllers/
+- routes/
+- models/
+- middleware/
+- utils/
+- config/
+- app.js
+- server.js
+
+/** DEPLOYMENT **/
+// Use Git for version control
+// Use AWS EC2 + RDS + S3 for deployment
+
+/** To Do Next **/
+// 1. Make UI
+// 2. study: sendGrid, Dashboard, SearchFilter.
+// 3. deploy
