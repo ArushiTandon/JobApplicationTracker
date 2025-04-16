@@ -5,6 +5,10 @@ const bcrypt = require("bcrypt");
 const Users = sequelize.define(
   "Users",
   {
+    username: {
+      type: DataTypes.STRING,
+    },
+    
     email: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -25,13 +29,6 @@ const Users = sequelize.define(
       allowNull: false,
     },
 
-    firstName: {
-      type: DataTypes.STRING,
-    },
-    
-    lastName: {
-      type: DataTypes.STRING,
-    },
 
     location: {
       type: DataTypes.STRING,

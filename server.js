@@ -17,9 +17,35 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
+// Routes
+const userRoutes = require('./routes/userRoutes');
+const dashboardRoutes = require('./routes/dashboardRoutes');
+
+
+
 app.use(express.static(path.join(__dirname, 'public')));
 
-sequelize.sync({ force: true }) 
+app.get('/user/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'login', 'login.html'));
+});
+
+app.get('/user/signup', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'signup', 'signup.html'));
+});
+
+app.get('/user/profile', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'profile', 'profile.html'));
+});
+
+app.get('/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'dashboard', 'dashboard.html'));
+});
+app.use('/api/user', userRoutes);
+app.use('/dashboard', dashboardRoutes)
+
+
+
+sequelize.sync({ alter: false }) 
     .then(() => {
         console.log('Database synced');
         app.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`));

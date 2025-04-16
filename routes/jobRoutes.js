@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { jwtAuthMiddleware } = require("../middlewares/jwt");
+const { jwtAuthMiddleware } = require("../middleware/jwt");
 const Job = require('../controller/jobController');
 
 //create a new job : admin

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { jwtAuthMiddleware } = require("../middlewares/jwt");
-const dashboardController = require('../controllers/dashboardController');
+const { jwtAuthMiddleware } = require("../middleware/jwt");
+const dashboardController = require('../controller/dashboardController');
 
 // Dashboard stats
 router.get('/overview', jwtAuthMiddleware, dashboardController.getOverviewStats);

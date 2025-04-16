@@ -1,22 +1,24 @@
 const bcrypt = require('bcrypt');
-const User = require('../model/user');
-const { generateToken } = require('../middlewares/jwt');
+const Users = require('../model/user');
+const { generateToken } = require('../middleware/jwt');
 const sequelize = require('../util/db');
 
 exports.signUp = async (req, res) => {
+    
+    console.log("SIGN UP BODY:", req.body );
     
     const {username, email, phone, password} = req.body;
     const t = await sequelize.transaction();
 
     try {
-        const user = await User.findOne({ where: { username } });
+        const user = await Users.findOne({ where: { username } });
       
         if(user) {
             console.log('Username already exists');
             return res.status(200).json({ message: 'Username already exists'});
         }
 
-        const newUser = await User.create({username, email, phone, password});
+        const newUser = await Users.create({ username, email, phone, password});
         await t.commit();
         
         res.status(201).json({userId: newUser.id,
@@ -36,7 +38,7 @@ exports.login = async(req, res) => {
     
     try {
         
-        const user = await User.findOne({ where: { email } });
+        const user = await Users.findOne({ where: { email } });
         // console.log('Found User:', user);
 
         if (!user) {
@@ -66,7 +68,6 @@ exports.login = async(req, res) => {
         return res.status(200).json({
             message: 'Login successful!',
             token: token,
-            // redirectUrl: '',
         });
 
     } catch (error) {
@@ -76,16 +77,13 @@ exports.login = async(req, res) => {
 }
 
 exports.getUser = async (req, res) => {
-
+    
     const userId = req.user.id;
     
     try {
-        const user = await User.findByPk({ where: { id: userId } });
-
-        res.status(200).json({
-            user: user,
-            // redirectUrl: '',
-        });        
+        const user = await Users.findByPk(userId);
+        
+        res.status(200).json({ user });        
 
     } catch (error) {
         console.error('Error fetching users:', error);
@@ -97,15 +95,15 @@ exports.getUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
 
     const userId = req.user.id;
-    const {firstName, lastName, email, phone, location, currentRole, currentCompany, experienceLevel, careerGoals} = req.body;
+    const {username, email, phone, location, currentRole, currentCompany, experienceLevel, careerGoals} = req.body;
 
     try {
-        const user = await User.findByPk(userId);
+        const user = await Users.findByPk(userId);
         if(!user){
             return res.status(404).json({message: 'User not found'});
         }
 
-        const updateData = { firstName, lastName, email, phone, location, currentRole, currentCompany, experienceLevel, careerGoals };
+        const updateData = { username, email, phone, location, currentRole, currentCompany, experienceLevel, careerGoals };
 
 
         await user.update(updateData);

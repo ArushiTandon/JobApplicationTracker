@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { createJobApplication, getJobApplications, searchApplications, updateJobApplication, deleteJobApplication } = require('../controllers/jobApplicationController');
-const { jwtAuthMiddleware } = require('../middlewares/jwt');
-const { uploadFile } = require('../middlewares/fileUpload');
+const { createJobApplication, getJobApplications, searchApplications, updateJobApplication, deleteJobApplication } = require('../controller/jobApplicationController');
+const { jwtAuthMiddleware } = require('../middleware/jwt');
+// const { uploadFile } = require('../middleware/fileUpload');
 
 // Create a new job application
-router.post('/application/create', jwtAuthMiddleware, uploadFile, createJobApplication);
+router.post('/application/create', jwtAuthMiddleware, createJobApplication);
 
 // Get all job applications
 router.get('/application/all', jwtAuthMiddleware, getJobApplications);
@@ -17,7 +17,7 @@ router.get('/application/:jobId', jwtAuthMiddleware, getJobApplications);
 router.get('/search', jwtAuthMiddleware, searchApplications);
 
 // Update a job application by ID
-router.put('/application/update/:jobId', jwtAuthMiddleware, uploadFile, updateJobApplication);
+router.put('/application/update/:jobId', jwtAuthMiddleware,  updateJobApplication);
 
 // Delete a job application by ID
 router.delete('/application/:jobId', jwtAuthMiddleware, deleteJobApplication);

@@ -1,4 +1,7 @@
 const JobApplication = require("../model/jobApplication");
+const { sequelize } = require("../util/db");
+const { fn, col } = require("sequelize");
+
 
 exports.getOverviewStats = async (req, res) => {
   try {
@@ -8,7 +11,7 @@ exports.getOverviewStats = async (req, res) => {
 
     const statusCounts = await JobApplication.findAll({
       where: { userId },
-      attributes: ["status", [sequelize.fn("COUNT", sequelize.col("status")), "count"]],
+      attributes: ["status", [fn("COUNT", col("status")), "count"]],
       group: ["status"]
     });
 
@@ -40,11 +43,11 @@ exports.getChartData = async (req, res) => {
       const timeline = await JobApplication.findAll({
         where: { userId },
         attributes: [
-          [sequelize.fn("DATE", sequelize.col("applicationDate")), "date"],
-          [sequelize.fn("COUNT", sequelize.col("id")), "count"]
+          [fn("DATE", col("applicationDate")), "date"],
+          [fn("COUNT", col("id")), "count"]
         ],
         group: ["date"],
-        order: [[sequelize.fn("DATE", sequelize.col("applicationDate")), "ASC"]]
+        order: [[fn("DATE", col("applicationDate")), "ASC"]]
       });
   
       res.status(200).json({ timeline });
