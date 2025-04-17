@@ -4,6 +4,12 @@ const sequelize = require("../util/db");
 const JobApplication = sequelize.define(
   "JobApplication",
   {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,

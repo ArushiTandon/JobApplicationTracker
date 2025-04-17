@@ -29,15 +29,15 @@ const jobApplicationRoutes = require('./routes/jobApplicationRoutes');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/user/login', (req, res) => {
+app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'login', 'login.html'));
 });
 
-app.get('/user/signup', (req, res) => {
+app.get('/signup', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'signup', 'signup.html'));
 });
 
-app.get('/user/profile', (req, res) => {
+app.get('/profile', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'profile', 'profile.html'));
 });
 
@@ -45,7 +45,7 @@ app.get('/dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'dashboard', 'dashboard.html'));
 });
 
-app.get('/job', (req, res) => {
+app.get('/jobs', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'jobs', 'jobs.html'));
 });
 
@@ -60,9 +60,11 @@ app.get('/reminder', (req, res) => {
 app.get('/jobApplication', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'jobApplication', 'jobApplication.html'));
 });
+
+
 app.use('/api/user', userRoutes);
 app.use('/dashboard', dashboardRoutes)
-app.use('/job', jobRoutes)
+app.use('/jobs', jobRoutes)
 app.use('/notes', notesRoutes);
 app.use('/reminder', reminderRoutes);
 app.use('/jobApplication', jobApplicationRoutes)

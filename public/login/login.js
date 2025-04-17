@@ -1,4 +1,4 @@
-const apiUrl = "http://localhost:3000/user";
+const apiUrl = "http://localhost:3000/api/user";
 
 async function login(event) {
     event.preventDefault();
@@ -18,7 +18,7 @@ async function login(event) {
             const token = response.data.token;
             localStorage.setItem('authToken', token);
 
-            window.location.href = "/dashboard.html";
+            window.location.href = "/dashboard";
         }
           
     } catch (error) {

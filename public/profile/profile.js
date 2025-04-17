@@ -11,7 +11,6 @@ async function fetchUserProfile() {
 
     const res = await axios.get(`${apiUrl}/profile`, { headers });
     const user = res.data.user;
-    
 
     // View mode
     document.getElementById('userName').innerText = user.username || '—';
@@ -65,6 +64,9 @@ async function submitUserUpdate(e) {
     alert(res.data.message || 'Profile updated.');
     await fetchUserProfile();
     toggleEditMode(false);
+
+    window.location.href = "/dashboard";
+    
   } catch (err) {
     console.error('Update error:', err);
     alert(err.response?.data?.message || 'Failed to update profile.');

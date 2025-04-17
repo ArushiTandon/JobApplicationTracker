@@ -10,18 +10,20 @@ router.post('/create', jwtAuthMiddleware, uploadSingle, createJobApplication);
 // Get all job applications
 router.get('/all', jwtAuthMiddleware, getJobApplications);
 
-// Get a specific job application by ID
-router.get('/view/:jobId', jwtAuthMiddleware, getJobApplications);
-
 //search job applications
 router.get('/search', jwtAuthMiddleware, searchApplications);
 
-
 // Delete a job application by ID
-router.delete('/delete/:jobId', jwtAuthMiddleware, deleteJobApplication);
+router.delete('/delete/:id', jwtAuthMiddleware, deleteJobApplication);
 
 module.exports = router;
 
 
+
+
+// router.get('/view/:jobId', jwtAuthMiddleware, getJobApplications);
+
 // // Update a job application by ID
 // router.put('/update/:jobId', jwtAuthMiddleware,  updateJobApplication);
+
+// Get a specific job application by ID

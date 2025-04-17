@@ -1,10 +1,11 @@
 const JobApplication = require('../model/jobApplication')
 const sequelize = require('../util/db');
 const { Op } = require("sequelize");
-const { uploadFileToS3 } = require('../services/aws');
+const { uploadToS3 } = require('../services/aws');
 
 exports.createJobApplication = async (req, res) => {
   const userId = req.user.id;
+  const { companyId } = req.params;
   const {
     companyName,
     jobTitle,
@@ -19,13 +20,14 @@ exports.createJobApplication = async (req, res) => {
 
     // If a file was uploaded, upload to S3 and get URL
     if (req.file) {
-      resumeUrl = await uploadFileToS3(req.file);
+      resumeUrl = await uploadToS3(req.file);
     }
 
     const jobApplication = await sequelize.transaction(async (t) => {
       return await JobApplication.create(
         {
           userId,
+          companyId,
           companyName,
           jobTitle,
           applicationDate,
@@ -51,25 +53,14 @@ exports.createJobApplication = async (req, res) => {
 exports.getJobApplications = async (req, res) => {
 
     const userId = req.user.id;
-    const jobId = req.params.id;
 
     try {
-        if (jobId) {
-            const jobApplication = await JobApplication.findOne({ where: { userId, jobId } });
-            if (!jobApplication) {
-              return res.status(404).json({ message: 'Job application not found' });
-            }
-            return res.status(200).json({
-              message: 'Job application fetched successfully',
-              jobApplication,
-            });
-          } else {
+        
             const jobApplications = await JobApplication.findAll({ where: { userId } });
             return res.status(200).json({
               message: 'Job applications fetched successfully',
               jobApplications,
             });
-          }
         
     } catch (error) {
         console.error('ERROR GETTING JOB APPLICATIONS:', error);
@@ -115,27 +106,28 @@ exports.searchApplications = async (req, res) => {
 
 
 exports.deleteJobApplication = async (req, res) => {
-  
   const userId = req.user.id;
-    const jobId = req.params.jobid;
+  const applicationId = req.params.id;
 
-    try {
+  console.log("Deleting job application with id:", applicationId);
 
-        const jobApplication = await sequelize.transaction(async(t) => {
-            const jobApplication = await JobApplication.findOne({ where: {userId, jobId} });
-            if(!jobApplication){
-                return res.status(404).json({ message: 'job application not found'})
-            }
-            await jobApplication.destroy({ transaction: t});
-        })
+  try {
+    const deleted = await JobApplication.destroy({
+      where: { id: applicationId, userId } 
+    });
 
-        res.status(200).json({ message: 'job application deleted successfully', jobApplication})
-        
-    } catch (error) {
-        console.error('ERROR DELETING JOB APPLICATION:', error);
-        res.status(400).json({ error: 'Error deleting job application' });
+    if (!deleted) {
+      return res.status(404).json({ message: "Job application not found" });
     }
-}
+
+    res.status(200).json({ message: "Job application deleted successfully" });
+
+  } catch (error) {
+    console.error("ERROR DELETING JOB APPLICATION:", error);
+    res.status(500).json({ error: "Error deleting job application" });
+  }
+};
+
 
 
   // exports.updateJobApplication = async (req, res) => {

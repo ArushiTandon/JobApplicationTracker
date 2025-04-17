@@ -7,10 +7,15 @@ const headers = {
 
 async function addJobApplication(event) {
     event.preventDefault();
+    const params = new URLSearchParams(window.location.search);
+    const companyId = params.get('companyId');
+    const jobId = params.get('jobId');
 
     const form = document.getElementById("jobApplicationForm");
 
     const formData = new FormData(form);
+    formData.append("companyId", companyId);
+    formData.append("jobId", jobId);
 
     try {
 
@@ -20,7 +25,6 @@ async function addJobApplication(event) {
       },});
 
       alert(res.data.message);
-      window.location.href = "/dashboard.html";
 
     } catch (err) {
       console.error(err);
@@ -29,56 +33,19 @@ async function addJobApplication(event) {
 }
 
 async function fetchJobApplications() {
+  try {
+    const res = await axios.get(`${apiUrl}/all`, { headers });
+    const jobApplications = res.data.jobApplications;
+
     
-    try {
-      const res = await axios.get(`${apiUrl}/all`, { headers } );
+    renderTable(jobApplications);
     
-      const jobApplications = res.data.jobApplications;
-    
-      // Display stats
-      const stats = { Applied: 0, Interviewed: 0, Offered: 0, Rejected: 0, Accepted: 0 };
-      jobApplications.forEach(app => {
-        stats[app.status]++;
-      });
-    
-      document.getElementById("applied").textContent = stats.Applied;
-      document.getElementById("interviewed").textContent = stats.Interviewed;
-      document.getElementById("offered").textContent = stats.Offered;
-      document.getElementById("rejected").textContent = stats.Rejected;
-      document.getElementById("accepted").textContent = stats.Accepted;
-      document.getElementById("totalApplications").textContent = jobApplications.length;
-    
-      // Timeline chart data
-      const dateCountMap = {};
-      jobApplications.forEach(({ applicationDate }) => {
-        const date = new Date(applicationDate).toISOString().split("T")[0];
-        dateCountMap[date] = (dateCountMap[date] || 0) + 1;
-      });
-    
-      const labels = Object.keys(dateCountMap).sort();
-      const data = labels.map(date => dateCountMap[date]);
-    
-      const ctx = document.getElementById("timelineChart").getContext("2d");
-      new Chart(ctx, {
-        type: "line",
-        data: {
-          labels,
-          datasets: [
-            {
-              label: "Applications",
-              data,
-              borderColor: "rgba(75, 192, 192, 1)",
-              fill: false,
-            },
-          ],
-        },
-      });
-    
-    } catch (err) {
-      console.error("Failed to load dashboard data:", err);
-    }
+  } catch (err) {
+    console.error("Failed to load job applications:", err);
+    alert("Could not fetch job applications");
+  }
 }
-  
+
 
 async function searchApplications() {
 
@@ -143,6 +110,8 @@ async function searchApplications() {
 async function deleteApplication(id) {
   try {
 
+    console.log("Sending DELETE for id:", id);
+    
     await axios.delete(`${apiUrl}/delete/${id}`, {
       headers
     });

@@ -1,4 +1,4 @@
-const apiUrl = 'http://localhost:3000/user';
+const apiUrl = 'http://localhost:3000/api/user';
 
 async function signUp(event) {
     event.preventDefault();
@@ -16,7 +16,7 @@ async function signUp(event) {
         console.log("User created successfully");
         alert(response.data.message);
 
-        window.location.href = "/user/login";
+        window.location.href = "/login";
     } catch (error) {
         console.error("Unable to SignUp:", error);
     }

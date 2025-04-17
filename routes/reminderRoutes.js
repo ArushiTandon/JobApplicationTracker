@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const reminderController = require('../controllers/reminderController');
+const reminderController = require('../controller/reminderController');
 const { jwtAuthMiddleware } = require('../middleware/jwt');
 const { put } = require('./jobApplicationRoutes');
 

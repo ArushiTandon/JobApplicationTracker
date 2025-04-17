@@ -1,6 +1,6 @@
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 const multer = require('multer');
-const UserFile = require('../Models/userFile');
+const UserFile = require('../model/jobApplication')
 require('dotenv').config();
 
 // Configure S3 client with region and credentials
@@ -16,8 +16,11 @@ const s3 = new S3Client({
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
+const uploadSingle = upload.single('resume');
+
 // Upload to S3 middleware
-exports.uploadToS3 = [
+const uploadToS3 = async (req, res) => {
+
   upload.single('file'),
   async (req, res) => {
     try {
@@ -45,23 +48,21 @@ exports.uploadToS3 = [
       const fileUrl = `https://${uploadParams.Bucket}.s3.amazonaws.com/${fileName}`;
 
       await UserFile.create({
-        userId,
-        filename: file.originalname,
-        fileUrl,
+        resumeUrl: fileUrl,
       });
 
       res.json({
         message: 'File uploaded successfully!',
-        fileUrl,
+        resumeUrl: fileUrl,
       });
     } catch (err) {
       console.error('Error uploading file:', err);
       res.status(500).json({ error: 'Failed to upload file' });
     }
   }
-];
+}
 
 module.exports = {
     uploadSingle,
-    uploadFileToS3,
+    uploadToS3,
   };

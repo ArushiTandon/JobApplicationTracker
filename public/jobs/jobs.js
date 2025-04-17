@@ -35,13 +35,16 @@ function renderJobs(jobs, savedJobIds) {
       <div class="card shadow-sm">
         <div class="card-body">
           <h5 class="card-title">${job.title}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Location: ${job.location}</h6>
+          <h6 class="card-subtitle mb-2 text-muted">${job.companyName} • ${job.location}</h6>
           <p class="card-text">${job.description}</p>
           <p><strong>Type:</strong> ${job.jobType}</p>
           <p><strong>Salary:</strong> ${job.salary}</p>
-          <button class="btn ${isSaved ? 'btn-success' : 'btn-outline-primary'} save-btn" data-jobid="${job.id}">
-            ${isSaved ? 'Unsave' : 'Save'}
-          </button>
+          <div class="d-flex gap-2">
+            <button class="btn ${isSaved ? 'btn-success' : 'btn-outline-primary'} save-btn" data-jobid="${job.id}">
+              ${isSaved ? 'Unsave' : 'Save'}
+            </button>
+            <a href="/jobApplications/jobApplications.html?companyId=${job.companyId}&jobId=${job.id}" class="btn btn-primary">Apply</a>
+          </div>
         </div>
       </div>
     `;
@@ -51,6 +54,7 @@ function renderJobs(jobs, savedJobIds) {
 
   attachSaveListeners();
 }
+
 
 function attachSaveListeners() {
   const buttons = document.querySelectorAll(".save-btn");
