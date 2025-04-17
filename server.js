@@ -20,6 +20,10 @@ app.use(cors());
 // Routes
 const userRoutes = require('./routes/userRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
+const jobRoutes = require('./routes/jobRoutes');
+const notesRoutes = require('./routes/notesRoutes');
+const reminderRoutes = require('./routes/reminderRoutes');
+const jobApplicationRoutes = require('./routes/jobApplicationRoutes');
 
 
 
@@ -40,8 +44,28 @@ app.get('/user/profile', (req, res) => {
 app.get('/dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'dashboard', 'dashboard.html'));
 });
+
+app.get('/job', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'jobs', 'jobs.html'));
+});
+
+app.get('/notes', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'notes', 'notes.html'));
+});
+
+app.get('/reminder', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'reminder', 'reminder.html'));
+});
+
+app.get('/jobApplication', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'jobApplication', 'jobApplication.html'));
+});
 app.use('/api/user', userRoutes);
 app.use('/dashboard', dashboardRoutes)
+app.use('/job', jobRoutes)
+app.use('/notes', notesRoutes);
+app.use('/reminder', reminderRoutes);
+app.use('/jobApplication', jobApplicationRoutes)
 
 
 

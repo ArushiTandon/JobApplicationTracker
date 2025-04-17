@@ -1,4 +1,4 @@
-const { sequelize } = require('../util/db');
+const sequelize = require('../util/db');
 const Reminder = require('../model/reminder');
 
 exports.createReminder = async (req, res) => {

@@ -2,11 +2,6 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../util/db");
 
 const Company = sequelize.define("Company", {
-  userId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-
   name: {
     type: DataTypes.STRING,
     allowNull: false,

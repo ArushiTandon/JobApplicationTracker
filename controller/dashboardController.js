@@ -1,5 +1,5 @@
 const JobApplication = require("../model/jobApplication");
-const { sequelize } = require("../util/db");
+const sequelize = require("../util/db");
 const { fn, col } = require("sequelize");
 
 

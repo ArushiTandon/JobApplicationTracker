@@ -1,27 +1,52 @@
 const JobApplication = require('../model/jobApplication')
 const sequelize = require('../util/db');
 const { Op } = require("sequelize");
+const { uploadFileToS3 } = require('../services/aws');
 
 exports.createJobApplication = async (req, res) => {
+  const userId = req.user.id;
+  const {
+    companyName,
+    jobTitle,
+    applicationDate,
+    status,
+    notes,
+    location,
+  } = req.body;
 
-    const userId = req.user.id;
-    const {jobId, resume} = req.body;
-    
-    try {
+  try {
+    let resumeUrl = null;
 
-        const jobApplication = await sequelize.transaction(async(t) => {
-        JobApplication.create({jobId, userId, resume}, {transaction: t});
-        })
-
-        res.status(201).json({ message: 'job application created successfully', jobApplication });
-
-    } catch (error) {
-
-        console.error('ERROR CREATING JOB APPLICATION:', error);
-        res.status(400).json({ error: 'Error creating job application' });
-        
+    // If a file was uploaded, upload to S3 and get URL
+    if (req.file) {
+      resumeUrl = await uploadFileToS3(req.file);
     }
-}
+
+    const jobApplication = await sequelize.transaction(async (t) => {
+      return await JobApplication.create(
+        {
+          userId,
+          companyName,
+          jobTitle,
+          applicationDate,
+          status,
+          notes,
+          location,
+          resumeUrl,
+        },
+        { transaction: t }
+      );
+    });
+
+    res.status(201).json({
+      message: 'Job application created successfully',
+      jobApplication,
+    });
+  } catch (error) {
+    console.error('ERROR CREATING JOB APPLICATION:', error);
+    res.status(400).json({ error: 'Error creating job application' });
+  }
+};
 
 exports.getJobApplications = async (req, res) => {
 
@@ -89,28 +114,10 @@ exports.searchApplications = async (req, res) => {
 };
 
 
-exports.updateJobApplication = async (req, res) => {
-
-    const userId = req.user.id;
-    const jobId = req.params.id;
-    const { resume } = req.body;
-
-    try {
-
-        const jobApplication = await JobApplication.update( { resume }, { where: {userId, jobId } });
-
-        res.status(200).json({ message: 'job application updated successfully', jobApplication});
-
-    } catch (error) {
-        console.error('ERROR UPDATING JOB APPLICATION:', error);
-        res.status(400).json({ error: 'Error updating job application' });
-    }
-}
-
 exports.deleteJobApplication = async (req, res) => {
-
-    const userId = req.user.id;
-    const jobId = req.params.id;
+  
+  const userId = req.user.id;
+    const jobId = req.params.jobid;
 
     try {
 
@@ -119,7 +126,7 @@ exports.deleteJobApplication = async (req, res) => {
             if(!jobApplication){
                 return res.status(404).json({ message: 'job application not found'})
             }
-            await jobApplication.destroy({ where: {userId, jobId} , transaction: t});
+            await jobApplication.destroy({ transaction: t});
         })
 
         res.status(200).json({ message: 'job application deleted successfully', jobApplication})
@@ -129,3 +136,22 @@ exports.deleteJobApplication = async (req, res) => {
         res.status(400).json({ error: 'Error deleting job application' });
     }
 }
+
+
+  // exports.updateJobApplication = async (req, res) => {
+  
+  //     const userId = req.user.id;
+  //     const jobId = req.params.id;
+  //     const { resume } = req.body;
+  
+  //     try {
+  
+  //         const jobApplication = await JobApplication.update( { resume }, { where: {userId, jobId } });
+  
+  //         res.status(200).json({ message: 'job application updated successfully', jobApplication});
+  
+  //     } catch (error) {
+  //         console.error('ERROR UPDATING JOB APPLICATION:', error);
+  //         res.status(400).json({ error: 'Error updating job application' });
+  //     }
+  // }

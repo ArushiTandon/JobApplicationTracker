@@ -74,6 +74,6 @@
 // Use AWS EC2 + RDS + S3 for deployment
 
 /** To Do Next **/
-// 1. signup, login, dashboard, profile: view and edit,
+// 1. pending: 
 // 2. study: sendGrid, Dashboard, SearchFilter.
 // 3. deploy
