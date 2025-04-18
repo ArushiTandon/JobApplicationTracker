@@ -1,4 +1,4 @@
-const { sequelize } = require('../util/db');
+const sequelize = require('../util/db');
 const Notes = require('../model/notes');
 
 
@@ -9,7 +9,7 @@ exports.createNote = async (req, res) => {
 
     try {
 
-        const newNote = await sequelize.transaction(async (t) => {
+        const newNote = await sequelize.transaction(async(t) => {
             return await Notes.create({ note, userId }, { transaction: t });
         });
 
@@ -42,7 +42,7 @@ exports.updateNote = async (req, res) => {
     try {
 
         const updatedNote = await Notes.findOne({ where: {id: noteId}});
-        await updateNote.update(updateNote);
+        await updatedNote.update(updateNote);
 
         res.status(200).json({ message: 'Note updated successfully', updatedNote });
         

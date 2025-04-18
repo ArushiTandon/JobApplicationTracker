@@ -29,11 +29,11 @@ const jobApplicationRoutes = require('./routes/jobApplicationRoutes');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/login', (req, res) => {
+app.get('/user/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'login', 'login.html'));
 });
 
-app.get('/signup', (req, res) => {
+app.get('/user/signup', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'signup', 'signup.html'));
 });
 

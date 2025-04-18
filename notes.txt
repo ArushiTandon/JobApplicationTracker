@@ -74,9 +74,9 @@
 // Use AWS EC2 + RDS + S3 for deployment
 
 /** To Do Next **/
-// 1. pending: resume not getting uploaded on s3. 
+// 1. debugging: resume not getting uploaded on s3. 
 // - dashboard charts
-// - notes + reminder
+// - reminder
 // - job : view saved jobs
 // 2. study: sendGrid, Dashboard, SearchFilter.
 // 3. deploy
