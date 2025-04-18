@@ -7,6 +7,11 @@ const Job = sequelize.define("Job", {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    
+    companyName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
 
     companyId: {
         type: DataTypes.INTEGER,
