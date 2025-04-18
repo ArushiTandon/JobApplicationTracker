@@ -1,11 +1,10 @@
 const JobApplication = require('../model/jobApplication')
 const sequelize = require('../util/db');
 const { Op } = require("sequelize");
-const { uploadToS3 } = require('../services/aws');
+const { uploadFileToS3 } = require('../services/aws');
 
 exports.createJobApplication = async (req, res) => {
   const userId = req.user.id;
-  const { companyId } = req.params;
   const {
     companyName,
     jobTitle,
@@ -18,31 +17,25 @@ exports.createJobApplication = async (req, res) => {
   try {
     let resumeUrl = null;
 
-    // If a file was uploaded, upload to S3 and get URL
     if (req.file) {
-      resumeUrl = await uploadToS3(req.file);
+      resumeUrl = await uploadFileToS3(req.file);
     }
 
-    const jobApplication = await sequelize.transaction(async (t) => {
-      return await JobApplication.create(
-        {
-          userId,
-          companyId,
-          companyName,
-          jobTitle,
-          applicationDate,
-          status,
-          notes,
-          location,
-          resumeUrl,
-        },
-        { transaction: t }
-      );
+    const jobApplication = await JobApplication.create({
+      userId,
+      companyName,
+      jobTitle,
+      applicationDate,
+      status,
+      notes,
+      location,
+      resumeUrl,
     });
 
     res.status(201).json({
       message: 'Job application created successfully',
       jobApplication,
+      resumeUrl
     });
   } catch (error) {
     console.error('ERROR CREATING JOB APPLICATION:', error);

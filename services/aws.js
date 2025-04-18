@@ -1,9 +1,6 @@
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
-const multer = require('multer');
-const UserFile = require('../model/jobApplication')
 require('dotenv').config();
 
-// Configure S3 client with region and credentials
 const s3 = new S3Client({
   region: 'ap-south-1',
   credentials: {
@@ -12,57 +9,27 @@ const s3 = new S3Client({
   },
 });
 
-// Use multer with in-memory storage for file buffering
+const uploadFileToS3 = async (file) => {
+  const fileName = `${Date.now()}-${file.originalname}`;
+  const uploadParams = {
+    Bucket: 'jobtrackerapplication',
+    Key: fileName,
+    Body: file.buffer,
+    ContentType: file.mimetype,
+  };
+
+  const command = new PutObjectCommand(uploadParams);
+  await s3.send(command);
+
+  const fileUrl = `https://${uploadParams.Bucket}.s3.amazonaws.com/${fileName}`;
+  return fileUrl;
+};
+
+const multer = require('multer');
 const storage = multer.memoryStorage();
-const upload = multer({ storage });
-
-const uploadSingle = upload.single('resume');
-
-// Upload to S3 middleware
-const uploadToS3 = async (req, res) => {
-
-  upload.single('file'),
-  async (req, res) => {
-    try {
-      const userId = req.user.id;
-      const file = req.file;
-
-      if (!file) {
-        return res.status(400).json({ error: 'No file provided' });
-      }
-
-      const fileName = `${Date.now()}-${file.originalname}`;
-      const fileBuffer = file.buffer;
-
-      const uploadParams = {
-        Bucket: 'jobtrackerapplication',
-        Key: fileName,
-        Body: fileBuffer,
-        ACL: 'public-read',
-        ContentType: file.mimetype,
-      };
-
-      const command = new PutObjectCommand(uploadParams);
-      await s3.send(command);
-
-      const fileUrl = `https://${uploadParams.Bucket}.s3.amazonaws.com/${fileName}`;
-
-      await UserFile.create({
-        resumeUrl: fileUrl,
-      });
-
-      res.json({
-        message: 'File uploaded successfully!',
-        resumeUrl: fileUrl,
-      });
-    } catch (err) {
-      console.error('Error uploading file:', err);
-      res.status(500).json({ error: 'Failed to upload file' });
-    }
-  }
-}
+const uploadSingle = multer({ storage }).single('resume'); // Name must match HTML form field
 
 module.exports = {
-    uploadSingle,
-    uploadToS3,
-  };
+  uploadSingle,
+  uploadFileToS3,
+};

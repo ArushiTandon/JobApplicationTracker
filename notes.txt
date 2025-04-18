@@ -74,7 +74,4 @@
 // Use AWS EC2 + RDS + S3 for deployment
 
 /** To Do Next **/
-// 1. debugging: resume not getting uploaded on s3. 
-// - dashboard charts
-// - job : view saved jobs
-// 2. deploy
+// 1. debugging: job : view saved jobs
