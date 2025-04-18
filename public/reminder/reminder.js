@@ -1,4 +1,4 @@
-const apiUrl = "http://localhost:3000/reminder";
+const apiUrl = "http://localhost:3000/api/reminder";
 
 const token = localStorage.getItem("authToken");
 const headers = {
@@ -10,14 +10,15 @@ const reminderForm = document.getElementById("reminderForm");
 
 // Load Reminders
 async function fetchReminders() {
+
   try {
     const res = await axios.get(`${apiUrl}/all`, {
       headers
     });
-
+    
     const reminders = res.data.reminders;
     reminderList.innerHTML = "";
-
+    
     if (reminders.length === 0) {
       reminderList.innerHTML =
         '<li class="list-group-item text-muted">No reminders found.</li>';
@@ -53,6 +54,25 @@ async function fetchReminders() {
   }
 }
 
+async function populateJobApplications() {
+  try {
+    const res = await axios.get('http://localhost:3000/jobApplication/all', { headers });
+    const select = document.getElementById("jobId");
+    select.innerHTML = '<option value="">-- Select Job Application --</option>';
+
+    res.data.jobApplications.forEach(app => {
+      const option = document.createElement("option");
+      option.value = app.id;
+      option.textContent = `${app.jobTitle} at ${app.companyName}`;
+      select.appendChild(option);
+    });
+  } catch (err) {
+    console.error("Failed to load job applications:", err);
+    document.getElementById("jobId").innerHTML = '<option value="">Error loading applications</option>';
+  }
+}
+
+
 // Submit New Reminder
 reminderForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -79,7 +99,7 @@ reminderForm.addEventListener("submit", async (e) => {
 
 // Delete Reminder
 async function deleteReminder(reminderId) {
-  if (!confirm("Delete this reminder?")) return;
+  
   try {
     await axios.delete(`${apiUrl}/delete/${reminderId}`, {
       headers
@@ -92,29 +112,46 @@ async function deleteReminder(reminderId) {
 }
 
 // Edit Reminder (basic implementation with prompt)
-async function editReminder(reminder) {
-  const newMessage = prompt("Edit message:", reminder.message);
-  if (!newMessage) return;
+function editReminder(reminder) {
+  // Fill in modal fields
+  document.getElementById("editReminderId").value = reminder.id;
+  document.getElementById("editReminderMessage").value = reminder.message;
+  document.getElementById("editReminderDate").value = new Date(reminder.reminderDate)
+    .toISOString()
+    .slice(0, 16); // for datetime-local input
 
-  try {
-    await axios.put(
-      `${apiUrl}/update/${reminder.id}`,
-      {
-        message: newMessage,
-      },
-      {
-        headers
-      }
-    );
+  // Show the modal
+  const modal = new bootstrap.Modal(document.getElementById('editReminderModal'));
+  modal.show();
 
-    fetchReminders();
-  } catch (err) {
-    console.error(err);
-    alert("Failed to update reminder");
-  }
+  // Attach one-time event listener for form submission
+  const form = document.getElementById("editReminderForm");
+
+  const submitHandler = async function (e) {
+    e.preventDefault();
+
+    const id = document.getElementById("editReminderId").value;
+    const message = document.getElementById("editReminderMessage").value;
+    const reminderDate = document.getElementById("editReminderDate").value;
+
+    try {
+      await axios.put(`${apiUrl}/update/${id}`, { message, reminderDate }, { headers });
+
+      bootstrap.Modal.getInstance(document.getElementById("editReminderModal")).hide();
+      fetchReminders();
+    } catch (err) {
+      console.error(err);
+      alert("Failed to update reminder");
+    } finally {
+      form.removeEventListener("submit", submitHandler); 
+    }
+  };
+
+  form.addEventListener("submit", submitHandler);
 }
+
 
 addEventListener("DOMContentLoaded", () => {
     fetchReminders();
-    
+    populateJobApplications();
 })

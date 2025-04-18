@@ -66,7 +66,7 @@ app.use('/api/user', userRoutes);
 app.use('/dashboard', dashboardRoutes)
 app.use('/jobs', jobRoutes)
 app.use('/notes', notesRoutes);
-app.use('/reminder', reminderRoutes);
+app.use('/api/reminder', reminderRoutes);
 app.use('/jobApplication', jobApplicationRoutes)
 
 

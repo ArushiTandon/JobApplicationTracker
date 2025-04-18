@@ -76,7 +76,5 @@
 /** To Do Next **/
 // 1. debugging: resume not getting uploaded on s3. 
 // - dashboard charts
-// - reminder
 // - job : view saved jobs
-// 2. study: sendGrid, Dashboard, SearchFilter.
-// 3. deploy
+// 2. deploy

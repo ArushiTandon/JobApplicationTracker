@@ -38,7 +38,7 @@ exports.updateReminder = async (req, res) => {
 
   try {
 
-    const reminder = await Reminder.findByPk(req.params.id);
+    const reminder = await Reminder.findByPk(req.params.reminderId);
     if (!reminder) return res.status(404).json({ error: "Reminder not found" });
 
     await reminder.update(req.body);
@@ -51,9 +51,11 @@ exports.updateReminder = async (req, res) => {
 };
 
 exports.deleteReminder = async (req, res) => {
+
   try {
 
-    const reminder = await Reminder.findByPk(req.params.id);
+    const reminder = await Reminder.findByPk(req.params.reminderId);
+    
     if (!reminder) return res.status(404).json({ error: "Reminder not found" });
 
     await reminder.destroy();

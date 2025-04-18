@@ -56,7 +56,8 @@ exports.getJobApplications = async (req, res) => {
 
     try {
         
-            const jobApplications = await JobApplication.findAll({ where: { userId } });
+            const jobApplications = await JobApplication.findAll({ where: { userId },
+              attributes: ['id', 'jobTitle', 'companyName'], });
             return res.status(200).json({
               message: 'Job applications fetched successfully',
               jobApplications,
