@@ -26,7 +26,7 @@ SavedJob.belongsTo(User, { foreignKey: "userId" });
 Company.hasMany(Job, { foreignKey: "companyId" });
 Job.belongsTo(Company, { foreignKey: "companyId" });
 
-// Company has many JobApplications (optional)
+// Company has many JobApplications
 Company.hasMany(JobApplication, { foreignKey: "companyId" });
 JobApplication.belongsTo(Company, { foreignKey: "companyId" });
 

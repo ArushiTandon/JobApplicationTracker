@@ -67,7 +67,7 @@ async function searchApplications() {
       renderTable(res.data.applications);
     } catch (err) {
       console.error(err);
-      alert("Search failed");
+            alert("Search failed");
     }
   }
 
