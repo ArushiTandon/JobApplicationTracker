@@ -90,7 +90,6 @@ async function searchApplications() {
         <td>${app.status}</td>
         <td>${new Date(app.applicationDate).toLocaleDateString()}</td>
         <td>${app.location || "-"}</td>
-        <td>${app.notes || "-"}</td>
         <td>
           ${
             app.resumeUrl
@@ -110,7 +109,7 @@ async function searchApplications() {
 async function deleteApplication(id) {
   try {
 
-    console.log("Sending DELETE for id:", id);
+    // console.log("Sending DELETE for id:", id);
     
     await axios.delete(`${apiUrl}/delete/${id}`, {
       headers
@@ -125,9 +124,34 @@ async function deleteApplication(id) {
 
 
 document.addEventListener("DOMContentLoaded", async () => {
-  
-  fetchJobApplications();
+  const params = new URLSearchParams(window.location.search);
+  const jobId = params.get("jobId");
 
+const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+const dateInput = document.getElementById("applicationDate");
+if (dateInput) {
+  dateInput.value = today;
+  dateInput.readOnly = true; 
+}
+
+  if (jobId) {
+    try {
+      const jobRes = await axios.get(`http://localhost:3000/jobs/view/${jobId}`, { headers });
+      const job = jobRes.data.job;
+
+      // Fill form fields if they exist
+      document.getElementById("companyName").value = job.companyName || "";
+      document.getElementById("jobTitle").value = job.title || "";
+      document.getElementById("location").value = job.location || "";
+    } catch (err) {
+      console.error("Error fetching job data:", err);
+      alert("Failed to load job details.");
+    }
+  }
+
+  // Load existing applications
+  fetchJobApplications();
 });
+
   
   

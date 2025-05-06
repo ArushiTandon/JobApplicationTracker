@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createJobApplication, getJobApplications, searchApplications, updateJobApplication, deleteJobApplication } = require('../controller/jobApplicationController');
+const { createJobApplication, getJobApplications, searchApplications,  deleteJobApplication } = require('../controller/jobApplicationController');
 const { jwtAuthMiddleware } = require('../middleware/jwt');
 const { uploadSingle } = require('../services/aws');
 
@@ -18,12 +18,3 @@ router.delete('/delete/:id', jwtAuthMiddleware, deleteJobApplication);
 
 module.exports = router;
 
-
-
-
-// router.get('/view/:jobId', jwtAuthMiddleware, getJobApplications);
-
-// // Update a job application by ID
-// router.put('/update/:jobId', jwtAuthMiddleware,  updateJobApplication);
-
-// Get a specific job application by ID

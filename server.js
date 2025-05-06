@@ -29,38 +29,22 @@ const jobApplicationRoutes = require('./routes/jobApplicationRoutes');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/user/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'login', 'login.html'));
-});
-
-app.get('/user/signup', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'signup', 'signup.html'));
-});
-
-app.get('/profile', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'profile', 'profile.html'));
-});
-
-app.get('/dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'dashboard', 'dashboard.html'));
-});
-
-app.get('/jobs', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'jobs', 'jobs.html'));
-});
-
-app.get('/notes', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'notes', 'notes.html'));
-});
-
-app.get('/reminder', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'reminder', 'reminder.html'));
-});
-
-app.get('/jobApplication', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'jobApplication', 'jobApplication.html'));
-});
-
+const staticPages = [
+    { route: '/user/login', folder: 'login' },
+    { route: '/user/signup', folder: 'signup' },
+    { route: '/profile', folder: 'profile' },
+    { route: '/dashboard', folder: 'dashboard' },
+    { route: '/jobs', folder: 'jobs' },
+    { route: '/notes', folder: 'notes' },
+    { route: '/reminder', folder: 'reminder' },
+    { route: '/jobApplication', folder: 'jobApplication' }
+  ];
+  
+  staticPages.forEach(({ route, folder }) => {
+    app.get(route, (req, res) => {
+      res.sendFile(path.join(__dirname, 'public', folder, `${folder}.html`));
+    });
+  });
 
 app.use('/api/user', userRoutes);
 app.use('/dashboard', dashboardRoutes)

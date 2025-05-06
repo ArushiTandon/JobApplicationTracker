@@ -45,11 +45,7 @@ const JobApplication = sequelize.define(
       ),
       defaultValue: "Applied",
     },
-
-    notes: {
-      type: DataTypes.TEXT,
-    },
-
+    
     resumeUrl: {
       type: DataTypes.STRING,
     },

@@ -18,6 +18,25 @@ exports.getJobs = async (req, res) => {
     }
 }
 
+exports.viewJob = async (req, res) => {
+
+    const { jobId } = req.params;
+
+    try {
+
+        const job = await Job.findByPk(jobId);
+        if (!job) {
+            return res.status(404).json({ message: 'Job not found' });
+          }
+
+        res.status(200).json({ job });
+        
+    } catch (error) {
+        console.error('ERROR VIEWING JOB:', error);
+        res.status(400).json({ error: 'Error viewing job' });
+        
+    }
+}
 
 exports.saveJob = async (req, res) => {
     
@@ -116,23 +135,6 @@ exports.unsaveJob = async (req, res) => {
 //     console.error('ERROR CREATING JOB:', error);
 //     res.status(400).json({ error: 'Error creating job' });
 // }
-// }
-
-// exports.viewJob = async (req, res) => {
-
-//     const jobId = req.params.id;
-
-//     try {
-
-//         const job = await Job.findByPk(jobId);
-
-//         res.status(200).json({ message: 'Job fetched successfully', job});
-        
-//     } catch (error) {
-//         console.error('ERROR VIEWING JOB:', error);
-//         res.status(400).json({ error: 'Error viewing job' });
-        
-//     }
 // }
 
 // exports.updateJob = async (req, res) => {

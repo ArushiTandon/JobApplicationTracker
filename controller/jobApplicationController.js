@@ -1,5 +1,4 @@
 const JobApplication = require('../model/jobApplication')
-const sequelize = require('../util/db');
 const { Op } = require("sequelize");
 const { uploadFileToS3 } = require('../services/aws');
 
@@ -10,7 +9,6 @@ exports.createJobApplication = async (req, res) => {
     jobTitle,
     applicationDate,
     status,
-    notes,
     location,
   } = req.body;
 
@@ -27,7 +25,6 @@ exports.createJobApplication = async (req, res) => {
       jobTitle,
       applicationDate,
       status,
-      notes,
       location,
       resumeUrl,
     });
@@ -50,7 +47,7 @@ exports.getJobApplications = async (req, res) => {
     try {
         
             const jobApplications = await JobApplication.findAll({ where: { userId },
-              attributes: ['id', 'jobTitle', 'companyName', 'status', 'applicationDate', 'notes', 'location', 'resumeUrl'] });
+              attributes: ['id', 'jobTitle', 'companyName', 'status', 'applicationDate', 'location', 'resumeUrl'] });
             return res.status(200).json({
               message: 'Job applications fetched successfully',
               jobApplications,
@@ -84,8 +81,7 @@ exports.searchApplications = async (req, res) => {
   if (keyword) {
     whereClause[Op.or] = [
       { companyName: { [Op.like]: `%${keyword}%` } },
-      { jobTitle: { [Op.like]: `%${keyword}%` } },
-      { notes: { [Op.like]: `%${keyword}%` } }
+      { jobTitle: { [Op.like]: `%${keyword}%` } }
     ];
   }
 
@@ -121,23 +117,3 @@ exports.deleteJobApplication = async (req, res) => {
     res.status(500).json({ error: "Error deleting job application" });
   }
 };
-
-
-
-  // exports.updateJobApplication = async (req, res) => {
-  
-  //     const userId = req.user.id;
-  //     const jobId = req.params.id;
-  //     const { resume } = req.body;
-  
-  //     try {
-  
-  //         const jobApplication = await JobApplication.update( { resume }, { where: {userId, jobId } });
-  
-  //         res.status(200).json({ message: 'job application updated successfully', jobApplication});
-  
-  //     } catch (error) {
-  //         console.error('ERROR UPDATING JOB APPLICATION:', error);
-  //         res.status(400).json({ error: 'Error updating job application' });
-  //     }
-  // }

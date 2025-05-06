@@ -27,7 +27,7 @@ const uploadFileToS3 = async (file) => {
 
 const multer = require('multer');
 const storage = multer.memoryStorage();
-const uploadSingle = multer({ storage }).single('resume'); // Name must match HTML form field
+const uploadSingle = multer({ storage }).single('resume'); 
 
 module.exports = {
   uploadSingle,

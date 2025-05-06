@@ -6,6 +6,9 @@ const Job = require('../controller/jobController');
 //get all jobs
 router.get('/all', jwtAuthMiddleware, Job.getJobs);
 
+//view job by id
+router.get('/view/:jobId', jwtAuthMiddleware, Job.viewJob);
+
 // save a job
 router.post('/save', jwtAuthMiddleware, Job.saveJob);
 

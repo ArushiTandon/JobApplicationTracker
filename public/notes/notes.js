@@ -56,7 +56,6 @@ async function createNote() {
 async function updateNote(id) {
 
   const noteTextEl = document.getElementById(`note-${id}`);
-  noteTextEl.blur();
   const noteText = noteTextEl.value;
   console.log(`Updating note with ID: ${id}, Text: ${noteText}`);
 
