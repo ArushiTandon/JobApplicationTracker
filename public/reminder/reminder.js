@@ -30,8 +30,8 @@ async function fetchReminders() {
       li.className =
         "list-group-item d-flex justify-content-between align-items-start";
       li.innerHTML = `
-            <div>
-              <div><strong>Job ID:</strong> ${reminder.jobApplicationId}</div>
+            <div style="display: none;" class="job-id">${reminder.jobApplicationId}</div>
+  <div>
               <div><strong>Date:</strong> ${new Date(
                 reminder.reminderDate
               ).toLocaleString()}</div>
@@ -111,9 +111,9 @@ async function deleteReminder(reminderId) {
   }
 }
 
-// Edit Reminder (basic implementation with prompt)
+// Edit Reminder
 function editReminder(reminder) {
-  // Fill in modal fields
+  
   document.getElementById("editReminderId").value = reminder.id;
   document.getElementById("editReminderMessage").value = reminder.message;
   document.getElementById("editReminderDate").value = new Date(reminder.reminderDate)

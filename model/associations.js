@@ -6,9 +6,6 @@ const Reminder = require("./reminder");
 const SavedJob = require("./savedJob");
 const Notes = require("./notes");
 
-// // User has many Companies (will change it to admin later)
-// User.hasMany(Company, { foreignKey: "userId" });
-// Company.belongsTo(User, { foreignKey: "userId" });
 
 // User has many JobApplications
 User.hasMany(JobApplication, { foreignKey: "userId" });
@@ -37,3 +34,10 @@ SavedJob.belongsTo(Job, { foreignKey: "jobId" });
 // JobApplication has many Reminders
 JobApplication.hasMany(Reminder, { foreignKey: "jobApplicationId" });
 Reminder.belongsTo(JobApplication, { foreignKey: "jobApplicationId" });
+
+User.hasMany(Reminder, { foreignKey: 'userId' });
+Reminder.belongsTo(User, { foreignKey: 'userId' });
+
+// // User has many Companies (will change it to admin later)
+// User.hasMany(Company, { foreignKey: "userId" });
+// Company.belongsTo(User, { foreignKey: "userId" });

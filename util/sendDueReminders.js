@@ -1,14 +1,12 @@
-const cron = require("node-cron");
+// utils/sendDueReminders.js
 const { Op } = require("sequelize");
 const Reminder = require("../model/reminder");
 const User = require("../model/user");
 const sendEmail = require("../services/sendGrid");
-const sendDueReminders = require("../util/sendDueReminders");
 
-cron.schedule("*/10 * * * *", async () => {
-  await sendDueReminders();
+const sendDueReminders = async () => {
   const now = new Date();
-  const inTenMinutes = new Date(now.getTime() + 60 * 60 * 1000);
+  const inTenMinutes = new Date(now.getTime() + 10 * 60 * 1000);
 
   const reminders = await Reminder.findAll({
     where: {
@@ -33,4 +31,6 @@ cron.schedule("*/10 * * * *", async () => {
   }
 
   console.log(`${reminders.length} reminders sent`);
-});
+};
+
+module.exports = sendDueReminders;
