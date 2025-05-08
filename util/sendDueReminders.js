@@ -1,4 +1,3 @@
-// utils/sendDueReminders.js
 const { Op } = require("sequelize");
 const Reminder = require("../model/reminder");
 const User = require("../model/user");
