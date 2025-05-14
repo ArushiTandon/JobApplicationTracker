@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const sequelize = require('./util/db');
@@ -5,7 +6,6 @@ const passport = require('./middleware/auth');
 const cors = require('cors');
 require('./model/associations');
 require("./cron/reminder");
-require('dotenv').config();
 
 
 const app = express();
